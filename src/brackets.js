@@ -204,7 +204,6 @@ define(function (require, exports, module) {
             KeyBindingManager       : require("command/KeyBindingManager"),
             LanguageManager         : require("language/LanguageManager"),
             LiveDevelopment         : require("LiveDevelopment/LiveDevelopment"),
-            LiveDevMultiBrowser     : require("LiveDevelopment/LiveDevMultiBrowser"),
             LiveDevServerManager    : require("LiveDevelopment/LiveDevServerManager"),
             MainViewFactory         : require("view/MainViewFactory"),
             MainViewManager         : require("view/MainViewManager"),

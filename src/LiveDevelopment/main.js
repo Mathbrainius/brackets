@@ -38,7 +38,6 @@ define(function main(require, exports, module) {
         Commands            = require("command/Commands"),
         AppInit             = require("utils/AppInit"),
         LiveDevelopment     = require("LiveDevelopment/LiveDevelopment"),
-        MultiBrowserLiveDev = require("LiveDevelopment/LiveDevMultiBrowser"),
         Inspector           = require("LiveDevelopment/Inspector/Inspector"),
         CommandManager      = require("command/CommandManager"),
         PreferencesManager  = require("preferences/PreferencesManager"),
@@ -64,20 +63,22 @@ define(function main(require, exports, module) {
         }
     };
     // Status labels/styles are ordered: error, not connected, progress1, progress2, connected.
-    var _status,
-        _allStatusStyles = ["warning", "info", "success", "out-of-sync", "sync-error"].join(" ");
+    var _status = [
+        { tooltip: Strings.LIVE_DEV_STATUS_TIP_NOT_CONNECTED, style: "warning" },
+        { tooltip: Strings.LIVE_DEV_STATUS_TIP_NOT_CONNECTED, style: "" },
+        { tooltip: Strings.LIVE_DEV_STATUS_TIP_PROGRESS1, style: "info" },
+        { tooltip: Strings.LIVE_DEV_STATUS_TIP_CONNECTED, style: "success" },
+        { tooltip: Strings.LIVE_DEV_STATUS_TIP_OUT_OF_SYNC, style: "out-of-sync" },
+        { tooltip: Strings.LIVE_DEV_STATUS_TIP_SYNC_ERROR, style: "sync-error" },
+        { tooltip: Strings.LIVE_DEV_STATUS_TIP_PROGRESS1, style: "info" },
+        { tooltip: Strings.LIVE_DEV_STATUS_TIP_PROGRESS1, style: "info" }
+    ];
+    var _allStatusStyles = ["warning", "info", "success", "out-of-sync", "sync-error"].join(" ");
 
     var _$btnGoLive; // reference to the GoLive button
 
-    // current selected implementation (LiveDevelopment | LiveDevMultiBrowser)
-    var LiveDevImpl;
-
     // "livedev.multibrowser" preference
-    var PREF_MULTIBROWSER = "multibrowser";
     var prefs = PreferencesManager.getExtensionPrefs("livedev");
-    var multiBrowserPref = prefs.definePreference(PREF_MULTIBROWSER, "boolean", false, {
-        description: Strings.DESCRIPTION_LIVE_DEV_MULTIBROWSER
-    });
 
     // "livedev.remoteHighlight" preference
     var PREF_REMOTEHIGHLIGHT = "remoteHighlight";
@@ -123,26 +124,6 @@ define(function main(require, exports, module) {
         return val;
     }
 
-    /* Toggles or sets the "livedev.multibrowser" preference */
-    function _toggleLivePreviewMultiBrowser(value) {
-        var val = _togglePref(PREF_MULTIBROWSER, value);
-
-        CommandManager.get(Commands.TOGGLE_LIVE_PREVIEW_MB_MODE).setChecked(val);
-        // Issue #10217: multi-browser does not support user server, so disable
-        // the setting if it is enabled.
-        CommandManager.get(Commands.FILE_PROJECT_SETTINGS).setEnabled(!val);
-    }
-
-    /** Load Live Development LESS Style */
-    function _loadStyles() {
-        var lessText = require("text!LiveDevelopment/main.less");
-
-        less.render(lessText, function onParse(err, tree) {
-            console.assert(!err, err);
-            ExtensionUtils.addEmbeddedStyleSheet(tree.css);
-        });
-    }
-
     /**
      * Change the appearance of a button. Omit text to remove any extra text; omit style to return to default styling;
      * omit tooltip to leave tooltip unchanged.
@@ -175,21 +156,12 @@ define(function main(require, exports, module) {
      * Do nothing when in a connecting state (CONNECTING, LOADING_AGENTS).
      */
     function _handleGoLiveCommand() {
-        if (LiveDevImpl.status >= LiveDevImpl.STATUS_ACTIVE) {
-            LiveDevImpl.close();
-        } else if (LiveDevImpl.status <= LiveDevImpl.STATUS_INACTIVE) {
-            if (!params.get("skipLiveDevelopmentInfo") && !PreferencesManager.getViewState("livedev.afterFirstLaunch")) {
-                PreferencesManager.setViewState("livedev.afterFirstLaunch", "true");
-                Dialogs.showModalDialog(
-                    DefaultDialogs.DIALOG_ID_INFO,
-                    Strings.LIVE_DEVELOPMENT_INFO_TITLE,
-                    Strings.LIVE_DEVELOPMENT_INFO_MESSAGE
-                ).done(function (id) {
-                    LiveDevImpl.open();
-                });
-            } else {
-                LiveDevImpl.open();
-            }
+        if(!LiveDevelopment.isRunning()){
+            LiveDevelopment.open();
+            _setLabel(_$btnGoLive, null, _status[3].style, _status[3].tooltip);
+        } else{
+            LiveDevelopment.close();
+            _setLabel(_$btnGoLive, null, _status[1].style, _status[1].tooltip);
         }
     }
 
@@ -231,29 +203,10 @@ define(function main(require, exports, module) {
                 _handleGoLiveCommand();
             });
         }
-        LiveDevImpl.on("statusChange", function statusChange(event, status, reason) {
-            // status starts at -1 (error), so add one when looking up name and style
-            // See the comments at the top of LiveDevelopment.js for details on the
-            // various status codes.
-            _setLabel(_$btnGoLive, null, _status[status + 1].style, _status[status + 1].tooltip);
-            _showStatusChangeReason(reason);
-            if (config.autoconnect) {
-                window.sessionStorage.setItem("live.enabled", status === 3);
-            }
-        });
-
-        // Initialize tooltip for 'not connected' state
-        _setLabel(_$btnGoLive, null, _status[1].style, _status[1].tooltip);
     }
 
     /** Maintains state of the Live Preview menu item */
     function _setupGoLiveMenu() {
-        LiveDevImpl.on("statusChange", function statusChange(event, status) {
-            // Update the checkmark next to 'Live Preview' menu item
-            // Add checkmark when status is STATUS_ACTIVE; otherwise remove it
-            CommandManager.get(Commands.FILE_LIVE_FILE_PREVIEW).setChecked(status === LiveDevImpl.STATUS_ACTIVE);
-            CommandManager.get(Commands.FILE_LIVE_HIGHLIGHT).setEnabled(status === LiveDevImpl.STATUS_ACTIVE);
-        });
     }
 
     function _updateHighlightCheckmark() {
@@ -263,58 +216,7 @@ define(function main(require, exports, module) {
     function _handlePreviewHighlightCommand() {
         config.highlight = !config.highlight;
         _updateHighlightCheckmark();
-        if (config.highlight) {
-            LiveDevImpl.showHighlight();
-        } else {
-            LiveDevImpl.hideHighlight();
-        }
         PreferencesManager.setViewState("livedev.highlight", config.highlight);
-    }
-
-    /**
-     * Sets the MultiBrowserLiveDev implementation if multibrowser is truthy,
-     * keeps default LiveDevelopment implementation based on CDT otherwise.
-     * It also resets the listeners and UI elements.
-     */
-    function _setImplementation(multibrowser) {
-        if (multibrowser) {
-            // set implemenation
-            LiveDevImpl = MultiBrowserLiveDev;
-            // update styles for UI status
-            _status = [
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_NOT_CONNECTED, style: "warning" },
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_NOT_CONNECTED, style: "" },
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_PROGRESS1, style: "info" },
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_CONNECTED, style: "success" },
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_OUT_OF_SYNC, style: "out-of-sync" },
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_SYNC_ERROR, style: "sync-error" },
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_PROGRESS1, style: "info" },
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_PROGRESS1, style: "info" }
-            ];
-        } else {
-            LiveDevImpl = LiveDevelopment;
-            _status = [
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_NOT_CONNECTED, style: "warning" },
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_NOT_CONNECTED, style: "" },
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_PROGRESS1, style: "info" },
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_PROGRESS2, style: "info" },
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_CONNECTED, style: "success" },
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_OUT_OF_SYNC, style: "out-of-sync" },
-                { tooltip: Strings.LIVE_DEV_STATUS_TIP_SYNC_ERROR, style: "sync-error" }
-            ];
-        }
-        // setup status changes listeners for new implementation
-        _setupGoLiveButton();
-        _setupGoLiveMenu();
-        // toggle the menu
-        _toggleLivePreviewMultiBrowser(multibrowser);
-    }
-
-    /** Setup window references to useful LiveDevelopment modules */
-    function _setupDebugHelpers() {
-        window.ld = LiveDevelopment;
-        window.i = Inspector;
-        window.report = function report(params) { window.params = params; console.info(params); };
     }
 
     /** force reload the live preview */
@@ -332,63 +234,9 @@ define(function main(require, exports, module) {
         Inspector.init(config);
         LiveDevelopment.init(config);
 
-        // init experimental multi-browser implementation
-        // it can be enable by setting 'livedev.multibrowser' preference to true.
-        // It has to be initiated at this point in case of dynamically switching
-        // by changing the preference value.
-        MultiBrowserLiveDev.init(config);
-
-        _loadStyles();
         _updateHighlightCheckmark();
-
-        _setImplementation(prefs.get(PREF_MULTIBROWSER));
-
-        if (config.debug) {
-            _setupDebugHelpers();
-        }
-
-        // trigger autoconnect
-        if (config.autoconnect &&
-                window.sessionStorage.getItem("live.enabled") === "true" &&
-                DocumentManager.getCurrentDocument()) {
-            _handleGoLiveCommand();
-        }
-
-        // Redraw highlights when window gets focus. This ensures that the highlights
-        // will be in sync with any DOM changes that may have occurred.
-        $(window).focus(function () {
-            if (Inspector.connected() && config.highlight) {
-                LiveDevelopment.redrawHighlight();
-            }
-        });
-
-        multiBrowserPref
-            .on("change", function () {
-                // Stop the current session if it is open and set implementation based on
-                // the pref value. We could start the new implementation immediately, but
-                // since the current document is potentially a user preferences file, Live
-                // Preview will not locate the html file to serve.
-                if (LiveDevImpl && LiveDevImpl.status >= LiveDevImpl.STATUS_ACTIVE) {
-                    LiveDevImpl.close()
-                        .done(function () {
-                            // status changes will now be listened by the new implementation
-                            LiveDevImpl.off("statusChange");
-                            _setImplementation(prefs.get(PREF_MULTIBROWSER));
-                        });
-                } else {
-                    _setImplementation(prefs.get(PREF_MULTIBROWSER));
-                }
-            });
-        
-        remoteHighlightPref
-            .on("change", function () {
-                config.remoteHighlight = prefs.get(PREF_REMOTEHIGHLIGHT);
-                       
-                if (LiveDevImpl && LiveDevImpl.status >= LiveDevImpl.STATUS_ACTIVE) {
-                    LiveDevImpl.agents.remote.call("updateConfig",JSON.stringify(config));
-                }
-            });
-
+        _setupGoLiveButton();
+        _setupGoLiveMenu();
     });
 
     // init prefs
@@ -404,7 +252,6 @@ define(function main(require, exports, module) {
     CommandManager.register(Strings.CMD_LIVE_FILE_PREVIEW,  Commands.FILE_LIVE_FILE_PREVIEW, _handleGoLiveCommand);
     CommandManager.register(Strings.CMD_LIVE_HIGHLIGHT, Commands.FILE_LIVE_HIGHLIGHT, _handlePreviewHighlightCommand);
     CommandManager.register(Strings.CMD_RELOAD_LIVE_PREVIEW, Commands.CMD_RELOAD_LIVE_PREVIEW, _handleReloadLivePreviewCommand);
-    CommandManager.register(Strings.CMD_TOGGLE_LIVE_PREVIEW_MB_MODE, Commands.TOGGLE_LIVE_PREVIEW_MB_MODE, _toggleLivePreviewMultiBrowser);
 
     CommandManager.get(Commands.FILE_LIVE_HIGHLIGHT).setEnabled(false);
 

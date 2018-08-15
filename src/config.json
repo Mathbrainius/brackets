@@ -23,7 +23,8 @@
         "analyticsDataServerURL": "https://cc-api-data-stage.adobe.io/ingest",
         "serviceKey": "brackets-service",
         "environment": "stage",
-        "update_info_url": "https://s3.amazonaws.com/files.brackets.io/updates/prerelease/<locale>.json"
+        "update_info_url": "https://s3.amazonaws.com/files.brackets.io/updates/prerelease/<locale>.json",
+        "buildtype": "dev"
     },
     "name": "Brackets",
     "version": "1.14.0-0",
@@ -46,6 +47,7 @@
         "async": "2.1.4",
         "chokidar": "1.6.1",
         "decompress-zip": "0.3.0",
+        "forever": "^0.15.3",
         "fs-extra": "2.0.0",
         "lodash": "4.17.4",
         "npm": "3.10.10",
