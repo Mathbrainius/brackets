@@ -1,0 +1,4 @@
+.DS_Store
+node_modules/tern/node_modules/typescript/bin/tsc
+node_modules/tern/node_modules/acorn/bin/acorn
+node_modules/tern/node_modules/typescript/bin/tsc

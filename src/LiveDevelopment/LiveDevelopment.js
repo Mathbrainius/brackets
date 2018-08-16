@@ -1,4 +1,5 @@
 define(function LiveDevelopment(require, exports, module) {
+    "use strict";
 
     var NativeApp            = require("utils/NativeApp"),
         FileUtils           = require("file/FileUtils"),
@@ -19,7 +20,7 @@ define(function LiveDevelopment(require, exports, module) {
     }
         
     function open() {
-        _forever.exec("start", `${_baseUrl}/dev/app.js`).done(function () {
+        _forever.exec("start", _baseUrl+'/dev/app.js').done(function () {
             _running = true;
             NativeApp.openLiveBrowser(
                 'localhost:8000',
