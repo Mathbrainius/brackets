@@ -120,7 +120,8 @@ define(function(require /*, exports, module*/) {
 
     Ternific.prototype.highlightHint = function(hint) {
         if(hint.doc && /^:code/.test(hint.doc)){
-            hint.example = hint.doc.replace(/^:code\s*/, "");
+            console.log(hint.doc);
+            hint.example = hint.doc.replace(/^:code\s*/, "").replace(/\r/, "\n");
             hint.example = beautify.js_beautify(hint.example);
             hint.doc = null;
         }

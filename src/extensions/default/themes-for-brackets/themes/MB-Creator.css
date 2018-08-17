@@ -1,0 +1,156 @@
+/* SWATCHES ---------------------------------------------------------------------- */
+
+span.cm-builtin     { color: #333; }
+span.cm-def			{ color: #333; }
+span.cm-header      { color: #333; }
+span.cm-meta		{ color: #333; }
+span.cm-operator	{ color: #333; }
+span.cm-qualifier	{ color: #333; }
+
+span.cm-atom		{ color: #008fff; }
+span.cm-link		{ color: #008fff; }
+span.cm-number		{ color: #008fff; }
+span.cm-string		{ color: #008fff; }
+span.cm-string-2    { color: #008fff; }
+span.cm-variable-2	{ color: #008fff; }
+span.cm-variable-3	{ color: #008fff; }
+
+span.cm-bracket		{ color: #303da2; }
+span.cm-tag			{ color: #303da2; }
+
+span.cm-attribute	{ color: #1eac7a; }
+span.cm-property	{ color: #1eac7a; } /* property after string */
+
+span.cm-comment		{ color: #aebbc1; }
+span.cm-error		{ color: #FB5050; }
+span.cm-keyword		{ color: #303da2; }
+span.cm-variable	{ color: #303da2; }
+
+
+/* MISC ---------------------------------------------------------------------- */
+
+.CodeMirror {
+    line-height: 1.4;
+}
+
+.CodeMirror-scroll {
+	background: #fff;
+	color: #4d6071;
+}
+
+.CodeMirror-cursor {
+	border-left: 1px solid #000 !important;
+}
+
+.CodeMirror-overwrite .CodeMirror-cursor {
+    border-bottom: 1px solid #000 !important;
+    border-left: none !important;
+}
+
+.CodeMirror-gutters {
+	background: #fff;
+	border-right: 1px solid #e6eff4;
+}
+
+.CodeMirror-linenumber {
+	color: #aebbc1;
+}
+
+.CodeMirror-selected {}
+
+/* Active Line */
+
+.CodeMirror-activeline-background {
+	background: #e7edf2 !important;
+}
+
+.CodeMirror-focused .CodeMirror-activeline .CodeMirror-gutter-elt {
+	color: #000;
+	background-color: transparent !important;
+}
+
+/* Matching Brackets and Tags */
+
+.CodeMirror-matchingbracket {
+    background: #b2e7ff !important;
+    color: #000 !important;
+}
+
+.CodeMirror-matchingtag {
+    background: #cbeeff !important;
+}
+
+.CodeMirror-focused .CodeMirror-activeline .CodeMirror-nonmatchingbracket {
+	color: #ff3da5 !important;
+}
+
+/* Search Match */
+
+/*
+.CodeMirror-searching {
+    background-color: #ffcd2d;
+    color: #000 !important;
+}
+.CodeMirror-searching.searching-current-match {
+    background-color: #ff8500;
+}
+*/
+
+/* Non-editor styling */
+
+#image-holder,
+#not-editor {
+    background-color: #fff;
+}
+
+#image-holder {
+    color: #4d6071;
+}
+
+.sidebar-selection,
+.filetree-selection {
+    /* Selected file or folder */
+    background: #d9d9d9;
+    border-bottom: none;
+    border-top: none;
+}
+
+
+/* Sidebar */
+
+#sidebar,
+#working-set-list-container {
+    background-color: #eaeaea;
+    text-shadow: none;
+    color: #222;
+}
+
+#sidebar #project-dropdown-toggle{
+    background-color: #d9d9d9;
+}
+
+#sidebar *{
+    -webkit-filter: none;
+    color: #3b3f40;
+}
+
+/* Toolbar */
+
+#main-toolbar{
+    background-color: #eaeaea;
+}
+
+#main-toolbar .buttons a:hover{
+    background-color: #d9d9d9 !important;
+}
+
+
+/* Pannel */
+.bottom-panel{
+    border: none;
+}
+
+.bottom-panel .toolbar{
+    background-color: #eaeaea;
+    box-shadow: none;
+}

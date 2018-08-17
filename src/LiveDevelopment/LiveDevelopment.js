@@ -9,8 +9,8 @@ define(function LiveDevelopment(require, exports, module) {
 
     var _bracketsPath   = FileUtils.getNativeBracketsDirectoryPath(),
         _modulePath     = FileUtils.getNativeModuleDirectoryPath(module),
-        _foreverPath     = [_bracketsPath, _modulePath, "node/Forever"].join("/"),
-        _forever        = new NodeDomain("forever", _foreverPath);
+        _npmPath        = [_bracketsPath, _modulePath, "Node/npm"].join("/"),
+        _npm            = new NodeDomain("NPM", _npmPath);
 
     var _baseUrl;
     var _running = false;
@@ -20,34 +20,29 @@ define(function LiveDevelopment(require, exports, module) {
     }
         
     function open() {
-        _forever.exec("start", _baseUrl+'/dev/app.js').done(function () {
+        _npm.exec("start", _baseUrl).done(function (err) {
             _running = true;
-            NativeApp.openLiveBrowser(
-                'localhost:8000',
-                true // enable remote debugging
-            );
-        });
 
+            setTimeout(function(){
+                NativeApp.openLiveBrowser(
+                    'localhost:8000',
+                    true // enable remote debugging
+                );
+            }, 2000)
+        });
     }
 
     function close() {
-        _forever.exec("stop").done(function (value) {
+        _npm.exec("stop", _baseUrl).done(function (err) {
             _running = false;
         });
-
-        // $result.fail(function (err) {
-        //     // the command failed; act accordingly!
-        //     console.log(err);
-        // });
     }
 
     function isRunning() {
         return _running;
     }
 
-    function on() {
-
-    }
+    function on() {}
 
     // Export public functions
     exports.open                = open;

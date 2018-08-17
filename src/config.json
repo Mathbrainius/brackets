@@ -1,7 +1,7 @@
 {
     "config": {
-        "app_title": "Brackets",
-        "app_name_about": "Brackets",
+        "app_title": "MB Creator",
+        "app_name_about": "MB Creator",
         "about_icon": "styles/images/brackets_icon.svg",
         "how_to_use_url": "https://github.com/adobe/brackets/wiki/How-to-Use-Brackets",
         "support_url": "https://github.com/adobe/brackets/wiki/Troubleshooting",
@@ -26,7 +26,7 @@
         "update_info_url": "https://s3.amazonaws.com/files.brackets.io/updates/prerelease/<locale>.json",
         "buildtype": "dev"
     },
-    "name": "Brackets",
+    "name": "MB Creator",
     "version": "1.14.0-0",
     "apiVersion": "1.14.0",
     "homepage": "http://brackets.io",

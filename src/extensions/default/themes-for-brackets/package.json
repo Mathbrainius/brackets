@@ -1,0 +1,25 @@
+{
+    "title": "Themes for Brackets",
+    "name": "themesforbrackets",
+    "author": "Jacob Lauritzen <jacsebl@hotmail.com>",
+    "contributors": "Eric Johnson <wormeyman@gmail.com>",
+    "description": "Theme-pack that styles the whole editor!",
+    "version": "2.0.14",
+    "keywords": [
+        "themes",
+        "brackets",
+        "custom",
+        "highlight",
+        "skins"
+    ],
+    "homepage": "https://github.com/Jacse/themes-for-brackets",
+    "bugs": "https://github.com/Jacse/themes-for-brackets/issues",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/Jacse/themes-for-brackets.git"
+    },
+    "engines": {
+        "brackets": ">=1.0.0"
+    },
+    "categories": "visual"
+}

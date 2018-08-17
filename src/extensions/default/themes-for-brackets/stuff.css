@@ -1,0 +1,23 @@
+.dark #status-indicators,
+.dark #status-indicators div:not(#status-inspection),
+.dark #status-info,
+.dark #status-indicators{
+    background: transparent;
+    color: inherit;
+}
+.CodeMirror-activeline-background {
+    background: none;
+}
+#working-set-header {
+    text-shadow: none;
+}
+.sidebar-selection-extension, .filetree-selection-extension { /* weird extension of the selected filename - disable styling so we can style by using .sidebar-selection and won't have to target these as well */
+    background: transparent;
+    border: none;
+}
+.working-set-header, .working-set-header>span {
+    background: transparent;
+}
+.inline-widget .CodeMirror-scroll .CodeMirror-linenumbers {
+    background-color: transparent;
+}

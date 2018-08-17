@@ -1,8 +1,8 @@
 {
-    "name": "Brackets",
+    "name": "MB Creator",
     "version": "1.14.0-0",
     "apiVersion": "1.14.0",
-    "homepage": "http://brackets.io",
+    "homepage": "",
     "issues": {
         "url": "http://github.com/adobe/brackets/issues"
     },
@@ -20,7 +20,6 @@
         "async": "2.1.4",
         "chokidar": "1.6.1",
         "decompress-zip": "0.3.0",
-        "forever": "^0.15.3",
         "fs-extra": "2.0.0",
         "lodash": "4.17.4",
         "npm": "3.10.10",

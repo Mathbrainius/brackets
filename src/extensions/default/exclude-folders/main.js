@@ -1,16 +1,16 @@
 /*
- * Copyright (c) 2013 - present Adobe Systems Incorporated. All rights reserved.
- *
+ * Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
  * the rights to use, copy, modify, merge, publish, distribute, sublicense,
  * and/or sell copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -18,50 +18,26 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 
-/*eslint-env node */
-/*jslint node: true */
+/*jslint vars: true, plusplus: true, devel: true, nomen: true,  regexp: true, indent: 4, maxerr: 50 */
+/*global define, brackets */
 
-"use strict";
-
-var Manager = require("node-process-manager");
-var manager;
-
-/**
- * Initialize the "fileWatcher" domain.
- * The fileWatcher domain handles watching and un-watching directories.
- */
-function init(domainManager) {
-    if (!domainManager.hasDomain("forever")) {
-        domainManager.registerDomain("forever", {major: 0, minor: 1});
-    }
-
-    domainManager.registerCommand(
-        "forever",
-        "start",
-        function(file) {
-            manager = new Manager(file);
-        },
-        false,
-        "Start a file or directory",
-        [{
-            name: "file",
-            type: "string",
-            description: "file path"
-        }]
-    );
-    domainManager.registerCommand(
-        "forever",
-        "stop",
-        function() {
-            manager.kill();
-        },
-        false,
-        "Stop a file or directory"
-    );
-
-}
-
-exports.init = init;
+define(function (require, exports, module) {
+    "use strict";
+    
+    var FileSystem  = brackets.getModule("filesystem/FileSystem");
+    
+    var _oldFilter = FileSystem._FileSystem.prototype._indexFilter;
+    
+    FileSystem._FileSystem.prototype._indexFilter = function (path, name) {
+        // Call old filter
+        var result = _oldFilter.apply(this, arguments);
+        
+        if (!result) {
+            return false;
+        }
+        
+        return !name.match(/^(node_modules|\.sass-cache|internal|Procfile|app.json|Gemfile|Gemfile.lock|dist|\..+)$/);
+    };
+});
