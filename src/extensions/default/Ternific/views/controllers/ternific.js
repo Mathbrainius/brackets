@@ -120,9 +120,10 @@ define(function(require /*, exports, module*/) {
 
     Ternific.prototype.highlightHint = function(hint) {
         if(hint.doc && /^:code/.test(hint.doc)){
-            console.log(hint.doc);
             hint.example = hint.doc.replace(/^:code\s*/, "").replace(/\r/, "\n");
-            hint.example = beautify.js_beautify(hint.example);
+            if(!/import\s+\{/.test(hint.example)){
+                hint.example = beautify.js_beautify(hint.example);
+            }
             hint.doc = null;
         }
         this.$ternific.find(".hintDetails").html($(brackets.getModule("thirdparty/mustache/mustache").render(tmpls.hintdetails, hint)));

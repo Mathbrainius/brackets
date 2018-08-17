@@ -90,7 +90,7 @@ define(function (require, exports, module) {
     });
 
     ExtensionUtils.loadStyleSheet(module, "stuff.css").then(function () {
-        EditorManager.resizeEditor();
+        //EditorManager.resizeEditor();
     });
     
     $("body").append('<link rel="stylesheet" id="TfB-style">');

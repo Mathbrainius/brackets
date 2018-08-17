@@ -10,6 +10,7 @@ define(function (require /*, exports, module*/) {
 
     var CodeHintManager = brackets.getModule("editor/CodeHintManager");
     var EventDispatcher = brackets.getModule("utils/EventDispatcher");
+    var beautify        = brackets.getModule("thirdparty/beautify");
     var hintTransform   = require("HintTransform");
     var hintHelper      = require("HintHelper");
 
@@ -143,9 +144,20 @@ define(function (require /*, exports, module*/) {
 
     TernHints.prototype.insertHint = function () {
         var hints = this.hints,
-            hint = this._transformed.tokens[this._selectedIndex];
+            hint = this._transformed.tokens[this._selectedIndex],
+            code;
 
-        this._cm.getDoc().replaceRange(hint.name, hints.result.start, hints.result.end);
+        if(hint.example){
+            let currentLine = this._cm.getDoc().getLine(hints.result.start.line);
+            let spaces = " ".repeat(currentLine.search(/\S|$/));
+            code = hint.example;
+            code = code.replace(/\n/g, "\n"+spaces);
+        } else{
+            code = hint.name;
+        }
+
+        console.log();
+        this._cm.getDoc().replaceRange(code, hints.result.start, hints.result.end);
 
         // Return false to indicate that another hinting session is not needed
         return false;
