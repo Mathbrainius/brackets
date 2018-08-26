@@ -23,7 +23,7 @@
 
 define({
     // product-specific strings
-    "APP_NAME"                             : "Brackets",
+    "APP_NAME"                             : "MB Creator",
 
     // Self locales (used by Debug > Switch Language)
     "LOCALE_BG"                                 : "български",

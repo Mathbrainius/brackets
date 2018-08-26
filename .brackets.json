@@ -16,7 +16,7 @@
             "linting.enabled": false
         }
     },
-    "spaceUnits": 4,
+    "spaceUnits": 2,
     "useTabChar": false,
     "themes.theme": "MB-Creator"
 }
