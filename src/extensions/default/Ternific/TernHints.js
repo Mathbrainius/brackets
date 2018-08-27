@@ -1,3 +1,4 @@
+/*eslint-disable */
 /**
  * Ternific Copyright (c) 2014 Miguel Castillo.
  *
@@ -148,8 +149,8 @@ define(function (require /*, exports, module*/) {
             code;
 
         if(hint.example){
-            let currentLine = this._cm.getDoc().getLine(hints.result.start.line);
-            let spaces = " ".repeat(currentLine.search(/\S|$/));
+            var currentLine = this._cm.getDoc().getLine(hints.result.start.line);
+            var spaces = " ".repeat(currentLine.search(/\S|$/));
             code = hint.example;
             code = code.replace(/\n/g, "\n"+spaces);
         } else{

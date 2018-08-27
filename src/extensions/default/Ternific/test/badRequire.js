@@ -1,3 +1,4 @@
+/*eslint-disable */
 define(function(require, exports, module){
     return {
         SINGLE_QUOTE: "SINGLE_QUOTE",

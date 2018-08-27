@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Jasmine Spec Runner</title>
+
+  
+  
+  <script src="./.grunt/grunt-contrib-jasmine/jasmine.js"></script>
+  
+  <script src="./.grunt/grunt-contrib-jasmine/jasmine-html.js"></script>
+  
+  <script src="./test/polyfills.js"></script>
+  
+  <script src="./src/thirdparty/jquery-2.1.3.min.js"></script>
+  
+  <script src="./src/thirdparty/less.min.js"></script>
+  
+  <script src="./test/spec/PhantomHelper.js"></script>
+  
+  
+
+  <script src=".grunt/grunt-contrib-jasmine/require.js"></script>
+  <script>
+    
+      require.config({"baseUrl":"src","paths":{"test":"../test","perf":"../test/perf","spec":"../test/spec","text":"thirdparty/text/text","i18n":"thirdparty/i18n/i18n"}});
+    
+  </script>
+  
+  <link rel="stylesheet" type="text/css" href=".grunt/grunt-contrib-jasmine/jasmine.css">
+  
+  <script>
+    require([
+      
+    ],
+    function(){
+      require(['./test/spec/CommandManager-test.js','./test/spec/ViewUtils-test.js','./.grunt/grunt-contrib-jasmine/reporter.js'], function(){
+        require(['./.grunt/grunt-contrib-jasmine/jasmine-helper.js'], function(){
+          // good to go! Our tests should already be running.
+        })
+      })
+    }
+    )
+  </script>
+</head>
+<body>
+</body>
+</html>

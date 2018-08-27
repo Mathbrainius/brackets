@@ -26,7 +26,7 @@
 
 "use strict";
 
-let exec = require('child_process').execSync;
+var exec = require('child_process').execSync;
 
 /**
  * Initialize the "fileWatcher" domain.
@@ -42,11 +42,11 @@ function init(domainManager) {
         "start",
         function(projectDir){
 
-            let commands = [
+            var commands = [
                 'export PATH="/usr/local/share/npm/bin:/usr/local/bin:/usr/local/sbin:~/bin:$PATH"',
-                `cd ${projectDir}`,
+                'cd '+projectDir,
                 'npm start'
-            ]
+            ];
             exec(commands.join(" && "));
 
 
@@ -65,11 +65,11 @@ function init(domainManager) {
         "stop",
         function(projectDir){
 
-            let commands = [
+            var commands = [
                 'export PATH="/usr/local/share/npm/bin:/usr/local/bin:/usr/local/sbin:~/bin:$PATH"',
-                `cd ${projectDir}`,
+                'cd '+projectDir,
                 'npm stop'
-            ]
+            ];
             exec(commands.join(" && "));
 
         },

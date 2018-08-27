@@ -45,19 +45,8 @@ define(function (require, exports, module) {
 
         console.log("Entering in openInTerm with :" + term);
         var entry = ProjectManager.getProjectRoot();
-        var currentDocument = DocumentManager.getCurrentDocument();
-        var selectedItem = ProjectManager.getSelectedItem();
-        var terminalPath;
+        var terminalPath = entry.fullPath;
 
-        if (selectedItem) {
-            if (selectedItem._isDirectory) {
-                terminalPath = selectedItem._path;
-            } else {
-                terminalPath = selectedItem._parentPath;
-            }
-        } else if (entry) {
-            terminalPath = entry.fullPath;
-        }
         if (terminalPath) {
             console.log("Entering in openInTerm, path '" + terminalPath + "'");
             openInTermDomain.exec("startTerm", terminalPath, term)
@@ -88,7 +77,7 @@ define(function (require, exports, module) {
 
     var menu1 = Menus.getContextMenu(Menus.ContextMenuIds.PROJECT_MENU);
     menu1.addMenuItem(COMMAND_ID);
-    var menu2 = Menus.getContextMenu(Menus.ContextMenuIds.WORKING_SET_MENU);
+    var menu2 = Menus.getContextMenu(Menus.ContextMenuIds.WORKING_SET_CONTEXT_MENU);
     menu2.addMenuItem(COMMAND_ID);
 
     var menu3 = Menus.getMenu(Menus.AppMenuBar.VIEW_MENU);

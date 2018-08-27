@@ -1,3 +1,4 @@
+/*eslint-disable */
 /**
  * Ternific Copyright (c) 2015 Miguel Castillo.
  *

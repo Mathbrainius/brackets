@@ -70,8 +70,8 @@ module.exports = function (grunt) {
                             'thirdparty/requirejs/require.js',
                             'LiveDevelopment/launch.html',
                             'LiveDevelopment/transports/**',
-                            'LiveDevelopment/MultiBrowserImpl/transports/**',
-                            'LiveDevelopment/MultiBrowserImpl/launchers/**'
+                            'LiveDevelopment/Node/**',
+                            'LiveDevelopment/*.js'
                         ]
                     },
                     /* node domains are not minified and must be copied to dist */
@@ -386,7 +386,7 @@ module.exports = function (grunt) {
     ]);
 
     // task: test
-    grunt.registerTask('test', ['eslint', 'jasmine', 'nls-check']);
+    grunt.registerTask('test', ['eslint', 'nls-check']);
 //    grunt.registerTask('test', ['eslint', 'jasmine', 'jasmine_node', 'nls-check']);
 
     // task: set-release
@@ -395,7 +395,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build-common', [
         'eslint:src',
-        'jasmine',
+        // 'jasmine',
         'clean',
         'less',
         'targethtml',

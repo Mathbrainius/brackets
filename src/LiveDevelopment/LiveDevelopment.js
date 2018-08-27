@@ -28,7 +28,7 @@ define(function LiveDevelopment(require, exports, module) {
                     'localhost:8000',
                     true // enable remote debugging
                 );
-            }, 2000)
+            }, 2000);
         });
     }
 

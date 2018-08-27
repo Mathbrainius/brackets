@@ -1,3 +1,4 @@
+/*eslint-disable */
 var myObj = {};
 
 Object.defineProperty(myObj, 'attr2', {
