@@ -22,8 +22,6 @@
             "ConEmu(x86)": "start \"ConEmu\" \"C:/Program Files (x86)/ConEmu/ConEmu.exe\" /Dir \"" + path + "\""
         };
 
-        console.log('In cmdStartTerm, command: "' + commandMap[term]);
-
         // mac terminals
         if (term === 'Terminal' || term === 'iTerm') {
             spawn('open', ['-a', term, path]);

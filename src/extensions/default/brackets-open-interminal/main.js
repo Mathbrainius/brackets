@@ -43,21 +43,16 @@ define(function (require, exports, module) {
 
     var openInTerm = function () {
 
-        console.log("Entering in openInTerm with :" + term);
         var entry = ProjectManager.getProjectRoot();
         var terminalPath = entry.fullPath;
 
         if (terminalPath) {
-            console.log("Entering in openInTerm, path '" + terminalPath + "'");
             openInTermDomain.exec("startTerm", terminalPath, term)
-                .done(function () {
-                    console.log("Term successfully started, showing : '" + terminalPath + "'");
-                })
+                .done(function () {})
                 .fail(function (err) {
                     console.error("Error showing '" + terminalPath + "' in Term:", err);
                 });
         }
-        console.log("openInTerm end");
 
     };
 
