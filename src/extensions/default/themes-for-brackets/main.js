@@ -69,7 +69,7 @@ define(function (require, exports, module) {
                 tempArr.push({
                     file: contents[i].name,
                     name: contents[i].name.replace(".css", ""),
-                    title: upperCase(contents[i].name.replace(".css", "")).replace(/\-/g, ' ') + " (Default)"
+                    title: upperCase(contents[i].name.replace(".css", "")).replace(/\-/g, ' ')
                 });
             }
         }

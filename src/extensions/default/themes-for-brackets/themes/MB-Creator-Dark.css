@@ -1,0 +1,67 @@
+/* SWATCHES ---------------------------------------------------------------------- */
+
+span.cm-builtin     { color: #d4d9e0; }
+span.cm-def			{ color: #d4d9e0; }
+span.cm-header      { color: #d4d9e0; }
+span.cm-meta		{ color: #d4d9e0; }
+span.cm-operator	{ color: #d4d9e0; }
+span.cm-qualifier	{ color: #d4d9e0; }
+span.cm-variable	{ color: #d4d9e0; }
+span.cm-string		{ color: #d4d9e0; }
+span.cm-number		{ color: #d4d9e0; }
+span.cm-string-2    { color: #d4d9e0; }
+span.cm-bracket		{ color: #d4d9e0; }
+.CodeMirror         { color: #d4d9e0; }
+
+span.cm-atom		{ color: #6ba6e2; }
+span.cm-link		{ color: #6ba6e2; }
+span.cm-variable-2	{ color: #6ba6e2; }
+span.cm-variable-3	{ color: #6ba6e2; }
+
+span.cm-tag			{ color: #c9859a; }
+span.cm-keyword		{ color: #c9859a; }
+
+span.cm-attribute	{ color: #66c9d6; }
+span.cm-property	{ color: #66c9d6; } /* property after string */
+
+span.cm-comment		{ color: #989fa2; }
+span.cm-error		{ color: #FB5050; }
+
+.file-status-icon.can-close:before{
+    color: rgba(255,255,255,0.5);
+}
+
+
+
+
+
+.CodeMirror-gutters,
+.CodeMirror-scroll{
+    background: #414853;
+    border-right: 1px solid #57606f;
+}
+
+#sidebar,
+#main-toolbar,
+#working-set-list-container,
+#status-bar,
+#status-indicators{
+    background-color: #2f3542;
+}
+
+#sidebar *,
+#status-bar *{
+    color: #d8d5d5;
+}
+
+#project-files-header .btn-alt-quiet,
+#project-dropdown-toggle,
+.sidebar-selection,
+.filetree-selection {
+    background: #1d2025;
+}
+
+/*
+#main-toolbar a:hover{
+    background-color: #fff !important;
+}*/
